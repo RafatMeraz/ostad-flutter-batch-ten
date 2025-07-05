@@ -14,7 +14,7 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
           children: [
             const SizedBox(height: 16),
@@ -31,8 +31,6 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
             ),
             Expanded(
               child: ListView.builder(
-                primary: false,
-                shrinkWrap: true,
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   return TaskCard();
