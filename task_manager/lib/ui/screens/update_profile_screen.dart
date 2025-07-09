@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task_manager/ui/widgets/screen_background.dart';
 import 'package:task_manager/ui/widgets/tm_app_bar.dart';
 
@@ -19,6 +20,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final TextEditingController _phoneTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ImagePicker _imagePicker = ImagePicker();
+  XFile? _selectedImage;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 24),
-                  // TODO: Design photo selector
+                  _buildPhotoPicker(),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _emailTEController,
@@ -105,7 +108,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: _onTapSignUpButton,
+                    onPressed: _onTapSubmitButton,
                     child: Icon(Icons.arrow_circle_right_outlined),
                   ),
                 ],
@@ -117,14 +120,64 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     );
   }
 
-  void _onTapSignUpButton() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Sign in with API
+  Widget _buildPhotoPicker() {
+    return GestureDetector(
+      onTap: _onTapPhotoPicker,
+      child: Container(
+        height: 50,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 100,
+              height: 50,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  bottomLeft: Radius.circular(8),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Text(
+                'Photo',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              _selectedImage == null ? 'Select image' : _selectedImage!.name,
+              maxLines: 1,
+              style: TextStyle(
+                overflow: TextOverflow.ellipsis
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _onTapPhotoPicker() async {
+    final XFile? pickedImage = await _imagePicker.pickImage(
+        source: ImageSource.gallery);
+    if (pickedImage != null) {
+      _selectedImage = pickedImage;
+      setState(() {});
     }
   }
 
-  void _onTapSignInButton() {
-    Navigator.pop(context);
+  void _onTapSubmitButton() {
+    if (_formKey.currentState!.validate()) {
+      // TODO: Update profile with API
+    }
   }
 
   @override
