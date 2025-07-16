@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager/data/models/user_model.dart';
 import 'package:task_manager/data/service/network_caller.dart';
 import 'package:task_manager/data/urls.dart';
@@ -141,7 +140,7 @@ class _SignInScreenState extends State<SignInScreen> {
     };
 
     NetworkResponse response = await NetworkCaller.postRequest(
-      url: Urls.loginUrl, body: requestBody,
+      url: Urls.loginUrl, body: requestBody, isFromLogin: true
     );
 
     if (response.isSuccess) {
