@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager/data/models/task_model.dart';
+import 'package:task_manager/data/service/network_caller.dart';
+import 'package:task_manager/data/urls.dart';
 import 'package:task_manager/ui/screens/add_new_task_screen.dart';
+import 'package:task_manager/ui/widgets/centered_circular_progress_indicator.dart';
+import 'package:task_manager/ui/widgets/snack_bar_message.dart';
 import 'package:task_manager/ui/widgets/task_card.dart';
 import 'package:task_manager/ui/widgets/task_count_summary_card.dart';
 
@@ -11,6 +16,15 @@ class NewTaskListScreen extends StatefulWidget {
 }
 
 class _NewTaskListScreenState extends State<NewTaskListScreen> {
+  bool _getNewTasksInProgress = false;
+  List<TaskModel> _newTaskList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getNewTaskList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,13 +45,18 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return TaskCard(
-                    taskType: TaskType.tNew,
-                  );
-                },
+              child: Visibility(
+                visible: _getNewTasksInProgress == false,
+                replacement: CenteredCircularProgressIndicator(),
+                child: ListView.builder(
+                  itemCount: _newTaskList.length,
+                  itemBuilder: (context, index) {
+                    return TaskCard(
+                      taskType: TaskType.tNew,
+                      taskModel: _newTaskList[index],
+                    );
+                  },
+                ),
               ),
             ),
           ],
@@ -48,6 +67,27 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
         child: Icon(Icons.add),
       ),
     );
+  }
+  
+  Future<void> _getNewTaskList() async {
+    _getNewTasksInProgress = true;
+    setState(() {});
+
+    NetworkResponse response = await NetworkCaller
+        .getRequest(url: Urls.getNewTasksUrl);
+
+    if (response.isSuccess) {
+      List<TaskModel> list = [];
+      for (Map<String, dynamic> jsonData in response.body!['data']) {
+        list.add(TaskModel.fromJson(jsonData));
+      }
+      _newTaskList = list;
+    } else {
+      showSnackBarMessage(context, response.errorMessage!);
+    }
+
+    _getNewTasksInProgress = false;
+    setState(() {});
   }
 
   void _onTapAddNewTaskButton() {
