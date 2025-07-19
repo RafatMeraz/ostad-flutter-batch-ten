@@ -4,6 +4,7 @@ class UserModel {
   late String firstName;
   late String lastName;
   late String mobile;
+  String? photo;
 
   String get fullName {
     return '$firstName $lastName';
@@ -15,6 +16,7 @@ class UserModel {
     firstName = jsonData['firstName'];
     lastName = jsonData['lastName'];
     mobile = jsonData['mobile'];
+    photo = jsonData['photo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -24,6 +26,7 @@ class UserModel {
       'firstName': firstName,
       'lastName': lastName,
       'mobile': mobile,
+      'photo': photo,
     };
   }
 }

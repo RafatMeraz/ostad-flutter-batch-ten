@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:task_manager/ui/controllers/auth_controller.dart';
 import 'package:task_manager/ui/screens/sign_in_screen.dart';
@@ -22,7 +24,14 @@ class _TMAppBarState extends State<TMAppBar> {
         onTap: _onTapProfileBar,
         child: Row(
           children: [
-            CircleAvatar(),
+            CircleAvatar(
+              backgroundImage:
+                  AuthController.userModel?.photo == null
+                      ? null
+                      : MemoryImage(
+                        base64Decode(AuthController.userModel!.photo!),
+                      ),
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -57,7 +66,10 @@ class _TMAppBarState extends State<TMAppBar> {
   Future<void> _onTapLogOutButton() async {
     await AuthController.clearData();
     Navigator.pushNamedAndRemoveUntil(
-        context, SignInScreen.name, (predicate) => false);
+      context,
+      SignInScreen.name,
+      (predicate) => false,
+    );
   }
 
   void _onTapProfileBar() {
