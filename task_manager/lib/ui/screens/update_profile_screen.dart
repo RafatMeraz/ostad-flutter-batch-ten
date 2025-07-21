@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:task_manager/data/models/user_model.dart';
 import 'package:task_manager/data/service/network_caller.dart';
 import 'package:task_manager/data/urls.dart';
 import 'package:task_manager/ui/controllers/auth_controller.dart';
@@ -111,7 +112,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     decoration: InputDecoration(hintText: 'Password'),
                     validator: (String? value) {
                       int length = value?.length ?? 0;
-                      
+
                       if (length > 0 && length <= 6) {
                         return 'Enter a password more than 6 letters';
                       }
@@ -172,10 +173,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
             Text(
               _selectedImage == null ? 'Select image' : _selectedImage!.name,
               maxLines: 1,
-              style: TextStyle(
-                overflow: TextOverflow.ellipsis
-              ),
-            )
+              style: TextStyle(overflow: TextOverflow.ellipsis),
+            ),
           ],
         ),
       ),
@@ -184,7 +183,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
 
   Future<void> _onTapPhotoPicker() async {
     final XFile? pickedImage = await _imagePicker.pickImage(
-        source: ImageSource.gallery);
+      source: ImageSource.gallery,
+    );
     if (pickedImage != null) {
       _selectedImage = pickedImage;
       setState(() {});
@@ -196,12 +196,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       _updateProfile();
     }
   }
-  
+
   Future<void> _updateProfile() async {
     _updateProfileInProgress = true;
     if (mounted) {
       setState(() {});
     }
+
+    Uint8List? imageBytes;
 
     Map<String, String> requestBody = {
       "email": _emailTEController.text,
@@ -215,12 +217,14 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
 
     if (_selectedImage != null) {
-      Uint8List imageBytes = await _selectedImage!.readAsBytes();
+      imageBytes = await _selectedImage!.readAsBytes();
       requestBody['photo'] = base64Encode(imageBytes);
     }
 
     NetworkResponse response = await NetworkCaller.postRequest(
-        url: Urls.updateProfileUrl, body: requestBody);
+      url: Urls.updateProfileUrl,
+      body: requestBody,
+    );
 
     _updateProfileInProgress = false;
     if (mounted) {
@@ -228,6 +232,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
 
     if (response.isSuccess) {
+      UserModel userModel = UserModel(
+          id: AuthController.userModel!.id,
+          email: _emailTEController.text,
+          firstName: _firstNameTEController.text.trim(),
+          lastName: _lastNameTEController.text.trim(),
+          mobile: _phoneTEController.text.trim(),
+          photo: imageBytes == null
+              ? AuthController.userModel?.photo
+              : base64Encode(imageBytes)
+      );
+
+      await AuthController.updateUserData(userModel);
+
       _passwordTEController.clear();
       if (mounted) {
         showSnackBarMessage(context, 'Profile updated');
