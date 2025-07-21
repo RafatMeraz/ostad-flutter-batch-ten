@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/data/models/user_model.dart';
 import 'package:task_manager/data/service/network_caller.dart';
 import 'package:task_manager/data/urls.dart';
@@ -149,8 +150,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
       await AuthController.saveUserData(userModel, token);
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, MainNavBarHolderScreen.name, (predicate) => false);
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, MainNavBarHolderScreen.name, (predicate) => false);
+      // Get.to(() => const MainNavBarHolderScreen());
+      // Get.toNamed(MainNavBarHolderScreen.name);
+      Get.offAllNamed(MainNavBarHolderScreen.name);
     } else {
       _signInProgress = false;
       setState(() {});

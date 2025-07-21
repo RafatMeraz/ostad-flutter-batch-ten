@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:task_manager/data/models/task_model.dart';
 import 'package:task_manager/data/models/task_status_count_model.dart';
 import 'package:task_manager/data/service/network_caller.dart';
@@ -137,6 +138,9 @@ class _NewTaskListScreenState extends State<NewTaskListScreen> {
   }
 
   void _onTapAddNewTaskButton() {
-    Navigator.pushNamed(context, AddNewTaskScreen.name);
+    // Navigator.pushNamed(context, AddNewTaskScreen.name);
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewTaskScreen()));
+    // Get.to(() => AddNewTaskScreen());
+    Get.toNamed(AddNewTaskScreen.name);
   }
 }
