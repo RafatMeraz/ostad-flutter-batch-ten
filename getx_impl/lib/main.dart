@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-CounterController controller = CounterController();
-
 void main() {
   runApp(const CounterApp());
 }
@@ -12,7 +10,10 @@ class CounterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: HomeScreen());
+    return GetMaterialApp(
+      home: HomeScreen(),
+      initialBinding: ControllerBinder(),
+    );
   }
 }
 
@@ -24,6 +25,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final CounterController controller = Get.find<CounterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             GetBuilder(
-              init: controller,
-              builder: (ctl) {
-                return Text(
-                  '${ctl.count}',
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                );
-              }
+                init: controller,
+                builder: (ctl) {
+                  return Text(
+                    '${ctl.count}',
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  );
+                }
             ),
             ElevatedButton(onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -79,14 +82,13 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Profile')),
       body: Center(
-        child: GetBuilder(
-          init: controller,
-          builder: (_) {
-            return Text(
-              controller.count.toString(),
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            );
-          }
+        child: GetBuilder<CounterController>(
+            builder: (controller) {
+              return Text(
+                controller.count.toString(),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              );
+            }
         ),
       ),
       floatingActionButton: Row(
@@ -94,14 +96,14 @@ class ProfileScreen extends StatelessWidget {
         children: [
           FloatingActionButton(
             onPressed: () {
-              controller.decrement();
+              Get.find<CounterController>().decrement();
             },
             child: Icon(Icons.remove),
           ),
           const SizedBox(width: 16),
           FloatingActionButton(
             onPressed: () {
-              controller.increment();
+              Get.find<CounterController>().increment();
             },
             child: Icon(Icons.add),
           ),
@@ -122,5 +124,12 @@ class CounterController extends GetxController {
   void decrement() {
     count--;
     update();
+  }
+}
+
+class ControllerBinder extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(CounterController());
   }
 }
