@@ -62,66 +62,92 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text('Home')),
       body: StreamBuilder(
         stream: db.collection('football').snapshots(),
-          builder: (context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshots) {
+        builder:
+            (
+              context,
+              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshots,
+            ) {
+              if (snapshots.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
 
-          if (snapshots.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
+              if (snapshots.hasError) {
+                return Center(child: Text(snapshots.error.toString()));
+              }
 
-          if (snapshots.hasError) {
-            return Center(child: Text(snapshots.error.toString()));
-          }
+              if (snapshots.hasData) {
+                _listOfScore.clear();
+                for (QueryDocumentSnapshot<Map<String, dynamic>> doc
+                    in snapshots.data!.docs) {
+                  LiveScore liveScore = LiveScore(
+                    id: doc.id,
+                    team1Name: doc.get('team1_name'),
+                    team2Name: doc.get('team2_name'),
+                    team1Score: doc.get('team1_score'),
+                    team2Score: doc.get('team2_score'),
+                    isRunning: doc.get('is_running'),
+                    winnerTeam: doc.get('winner_team'),
+                  );
+                  _listOfScore.add(liveScore);
+                }
+              }
 
-          if (snapshots.hasData) {
-            _listOfScore.clear();
-            for (QueryDocumentSnapshot<Map<String, dynamic>> doc in snapshots.data!.docs) {
-              LiveScore liveScore = LiveScore(
-                id: doc.id,
-                team1Name: doc.get('team1_name'),
-                team2Name: doc.get('team2_name'),
-                team1Score: doc.get('team1_score'),
-                team2Score: doc.get('team2_score'),
-                isRunning: doc.get('is_running'),
-                winnerTeam: doc.get('winner_team'),
-              );
-              _listOfScore.add(liveScore);
-            }
-          }
+              return ListView.builder(
+                itemCount: _listOfScore.length,
+                itemBuilder: (context, index) {
+                  LiveScore liveScore = _listOfScore[index];
 
-          return ListView.builder(
-            itemCount: _listOfScore.length,
-            itemBuilder: (context, index) {
-              LiveScore liveScore = _listOfScore[index];
-
-              return ListTile(
-                leading: CircleAvatar(
-                  radius: 8,
-                  backgroundColor: liveScore.isRunning ? Colors.green : Colors.grey,
-                ),
-                title: Text(liveScore.id),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                  return ListTile(
+                    onLongPress: () {
+                      db.collection('football').doc(liveScore.id).delete();
+                    },
+                    leading: CircleAvatar(
+                      radius: 8,
+                      backgroundColor: liveScore.isRunning
+                          ? Colors.green
+                          : Colors.grey,
+                    ),
+                    title: Text(liveScore.id),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(liveScore.team1Name),
-                        Text('  vs  '),
-                        Text(liveScore.team2Name),
+                        Row(
+                          children: [
+                            Text(liveScore.team1Name),
+                            Text('  vs  '),
+                            Text(liveScore.team2Name),
+                          ],
+                        ),
+                        Text('Is Running: ${liveScore.isRunning}'),
+                        Text('Winner Team: ${liveScore.winnerTeam}'),
                       ],
                     ),
-                    Text('Is Running: ${liveScore.isRunning}'),
-                    Text('Winner Team: ${liveScore.winnerTeam}'),
-                  ],
-                ),
-                trailing: Text(
-                  '${liveScore.team1Score} : ${liveScore.team2Score}',
-                  style: TextStyle(fontSize: 24),
-                ),
+                    trailing: Text(
+                      '${liveScore.team1Score} : ${liveScore.team2Score}',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  );
+                },
               );
             },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          LiveScore liveScore = LiveScore(
+              id: 'argvsgermany',
+              team1Name: 'Argentina',
+              team2Name: 'Germany',
+              team1Score: 2,
+              team2Score: 4,
+              isRunning: true,
+              winnerTeam: ''
           );
-        }
+
+          await db.collection('football')
+              .doc(liveScore.id)
+              .set(liveScore.toMap());
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
@@ -145,4 +171,15 @@ class LiveScore {
     required this.isRunning,
     required this.winnerTeam,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'team1_name' : team1Name,
+      'team2_name' : team2Name,
+      'team1_score' : team1Score,
+      'team2_score' : team2Score,
+      'is_running' : isRunning,
+      'winner_team' : winnerTeam,
+    };
+  }
 }
