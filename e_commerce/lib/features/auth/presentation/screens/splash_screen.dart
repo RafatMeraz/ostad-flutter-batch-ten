@@ -1,4 +1,5 @@
 import 'package:e_commerce/app/extensions/localization_extension.dart';
+import 'package:e_commerce/features/shared/presentation/widgets/language_change_switch.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -13,7 +14,12 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(context.localization.hello),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(context.localization.hello),
+          ],
+        ),
       ),
     );
   }
