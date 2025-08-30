@@ -13,4 +13,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get selectLanguage => 'Select Language bn';
+
+  @override
+  String get version => 'Version bn';
 }

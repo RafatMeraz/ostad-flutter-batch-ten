@@ -1,4 +1,5 @@
 {
     "hello": "hello",
-    "selectLanguage": "Select Language"
+    "selectLanguage": "Select Language",
+    "version": "Version"
 }

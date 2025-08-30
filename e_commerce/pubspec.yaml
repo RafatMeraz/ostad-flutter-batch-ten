@@ -1,7 +1,6 @@
 name: e_commerce
 description: "A new Flutter project."
-# The following line prevents the package from being accidentally published to
-# pub.dev using `flutter pub publish`. This is preferred for private packages.
+
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -21,6 +20,8 @@ dependencies:
   firebase_analytics: ^11.6.0
   intl: ^0.20.2
   get: ^4.7.2
+  flutter_svg: ^2.2.0
+  package_info_plus: ^8.3.1
 
 dev_dependencies:
   flutter_test:
@@ -31,3 +32,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
+
+  assets:
+    - assets/images/
