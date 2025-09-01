@@ -1,7 +1,9 @@
-import 'package:e_commerce/app/app_colors.dart';
 import 'package:e_commerce/app/app_theme.dart';
 import 'package:e_commerce/app/controllers/language_controller.dart';
+import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:e_commerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:e_commerce/features/auth/presentation/screens/splash_screen.dart';
+import 'package:e_commerce/features/auth/presentation/screens/verity_otp_screen.dart';
 import 'package:e_commerce/l10n/app_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +44,22 @@ class _CraftyBayState extends State<CraftyBay> {
           darkTheme: AppTheme.darkThemeData,
           themeMode: ThemeMode.light,
           home: SplashScreen(),
+          initialRoute: SplashScreen.name,
+          onGenerateRoute: (settings) {
+            late Widget screen;
+
+            if (settings.name == SplashScreen.name) {
+              screen = SplashScreen();
+            } else if (settings.name == SignInScreen.name) {
+              screen = SignInScreen();
+            } else if (settings.name == SignUpScreen.name) {
+              screen = SignUpScreen();
+            } else if (settings.name == VerifyOtpScreen.name) {
+              screen = VerifyOtpScreen();
+            }
+
+            return MaterialPageRoute(builder: (ctx) => screen);
+          },
         );
       },
     );
