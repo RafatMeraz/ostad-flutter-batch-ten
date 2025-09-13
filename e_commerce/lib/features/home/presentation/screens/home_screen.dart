@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../../shared/presentation/widgets/product_card.dart';
 import '../../../shared/presentation/widgets/product_category_item.dart';
 import '../widgets/app_bar_icon_button.dart';
 import '../widgets/home_banner_slider.dart';
@@ -41,12 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               HomeBannerSlider(),
               const SizedBox(height: 16),
-              _buildSectionHeader(title: 'Categories', onTapSeeAll: () {
-                Get.find<MainNavController>().moveToCategory();
-              }),
+              _buildSectionHeader(
+                title: 'Categories',
+                onTapSeeAll: () {
+                  Get.find<MainNavController>().moveToCategory();
+                },
+              ),
               _buildCategoryList(),
               _buildSectionHeader(title: 'New', onTapSeeAll: () {}),
+              _buildNewProductList(),
+              _buildSectionHeader(title: 'Special', onTapSeeAll: () {}),
+              _buildSpecialProductList(),
               _buildSectionHeader(title: 'Popular', onTapSeeAll: () {}),
+              _buildPopularProductList()
             ],
           ),
         ),
@@ -68,6 +76,33 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (context, index) {
           return SizedBox(width: 10);
         },
+      ),
+    );
+  }
+
+  Widget _buildNewProductList() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
+      ),
+    );
+  }
+
+  Widget _buildPopularProductList() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
+      ),
+    );
+  }
+
+  Widget _buildSpecialProductList() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
       ),
     );
   }
