@@ -2,7 +2,8 @@ import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dar
 import 'package:e_commerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:e_commerce/features/auth/presentation/screens/splash_screen.dart';
 import 'package:e_commerce/features/auth/presentation/screens/verity_otp_screen.dart';
-import 'package:e_commerce/features/products/product_list_screen.dart';
+import 'package:e_commerce/features/products/presentation/screens/product_details_screen.dart';
+import 'package:e_commerce/features/products/presentation/screens/product_list_screen.dart';
 import 'package:e_commerce/features/shared/presentation/screens/bottom_nav_holder_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -22,6 +23,8 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == ProductListScreen.name) {
     final String category = settings.arguments as String;
     screen = ProductListScreen(categoryName: category);
+  } else if (settings.name == ProductDetailsScreen.name) {
+    screen = ProductDetailsScreen();
   }
 
   return MaterialPageRoute(builder: (ctx) => screen);
