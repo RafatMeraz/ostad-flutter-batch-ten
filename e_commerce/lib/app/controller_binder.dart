@@ -3,11 +3,14 @@ import 'package:e_commerce/features/auth/presentation/controllers/sign_up_contro
 import 'package:e_commerce/features/shared/presentation/controllers/main_nav_controller.dart';
 import 'package:get/get.dart';
 
+import '../features/auth/presentation/controllers/verify_otp_controller.dart';
+
 class ControllerBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(MainNavController());
     Get.put(setUpNetworkClient());
     Get.put(SignUpController());
+    Get.put(VerifyOtpController());
   }
 }

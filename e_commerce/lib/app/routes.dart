@@ -17,7 +17,8 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == SignUpScreen.name) {
     screen = SignUpScreen();
   } else if (settings.name == VerifyOtpScreen.name) {
-    screen = VerifyOtpScreen();
+    final String email = settings.arguments as String;
+    screen = VerifyOtpScreen(email: email);
   } else if (settings.name == BottomNavHolderScreen.name) {
     screen = BottomNavHolderScreen();
   } else if (settings.name == ProductListScreen.name) {
