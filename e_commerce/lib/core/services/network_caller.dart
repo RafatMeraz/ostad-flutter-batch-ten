@@ -58,7 +58,7 @@ class NetworkCaller {
 
   Future<NetworkResponse> postRequest({
     required String url,
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
     bool isFromLogin = false,
   }) async {
     try {
@@ -77,8 +77,9 @@ class NetworkCaller {
       );
       _logResponse(url, response);
 
-      if (response.statusCode == 200) {
-        final decodedJson = jsonDecode(response.body);
+      final decodedJson = jsonDecode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         return NetworkResponse(
           isSuccess: true,
           statusCode: response.statusCode,
@@ -92,6 +93,7 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           errorMessage: _unAuthorizeMessage,
+          body: decodedJson,
         );
       } else {
         final decodedJson = jsonDecode(response.body);
@@ -99,6 +101,7 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           errorMessage: decodedJson['data'] ?? _defaultErrorMessage,
+          body: decodedJson,
         );
       }
     } catch (e) {
@@ -239,8 +242,9 @@ class NetworkCaller {
       );
       _logResponse(url, response);
 
+      final decodedJson = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final decodedJson = jsonDecode(response.body);
         return NetworkResponse(
           isSuccess: true,
           statusCode: response.statusCode,
@@ -254,6 +258,7 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           errorMessage: _unAuthorizeMessage,
+          body: decodedJson
         );
       } else {
         final decodedJson = jsonDecode(response.body);
@@ -261,6 +266,7 @@ class NetworkCaller {
           isSuccess: false,
           statusCode: response.statusCode,
           errorMessage: decodedJson['data'] ?? _defaultErrorMessage,
+          body: decodedJson
         );
       }
     } catch (e) {
@@ -274,7 +280,7 @@ class NetworkCaller {
 
   void _logRequest(
     String url,
-    Map<String, String>? body,
+    Map<String, dynamic>? body,
     Map<String, String>? headers,
   ) {
     _logger.i(

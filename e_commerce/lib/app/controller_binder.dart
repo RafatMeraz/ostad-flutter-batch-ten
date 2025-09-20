@@ -1,4 +1,5 @@
 import 'package:e_commerce/app/set_up_network_client.dart';
+import 'package:e_commerce/features/auth/presentation/controllers/sign_up_controller.dart';
 import 'package:e_commerce/features/shared/presentation/controllers/main_nav_controller.dart';
 import 'package:get/get.dart';
 
@@ -7,5 +8,6 @@ class ControllerBinding extends Bindings {
   void dependencies() {
     Get.put(MainNavController());
     Get.put(setUpNetworkClient());
+    Get.put(SignUpController());
   }
 }
