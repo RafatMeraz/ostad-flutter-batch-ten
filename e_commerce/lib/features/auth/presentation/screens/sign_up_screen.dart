@@ -1,5 +1,6 @@
 import 'package:e_commerce/features/auth/data/models/sign_up_request_model.dart';
 import 'package:e_commerce/features/auth/presentation/controllers/sign_up_controller.dart';
+import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:e_commerce/features/auth/presentation/screens/verity_otp_screen.dart';
 import 'package:e_commerce/features/auth/presentation/widgets/app_logo.dart';
 import 'package:e_commerce/features/shared/presentation/widgets/centered_circular_progress.dart';
@@ -133,7 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onTapBackToLoginButton() {
-    Navigator.pop(context);
+    Navigator.pushNamed(context, SignInScreen.name);
   }
 
   @override
