@@ -125,7 +125,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final bool isSuccess = await _signUpController.signUp(model);
     if (isSuccess) {
       showSnackBarMessage(context, 'Sign up successful! Please login');
-      Navigator.pushNamed(context, VerifyOtpScreen.name);
+      Navigator.pushNamed(context, VerifyOtpScreen.name,
+          arguments: _emailTEController.text.trim());
     } else {
       showSnackBarMessage(context, _signUpController.errorMessage!);
     }

@@ -1,3 +1,4 @@
+import 'package:e_commerce/app/controllers/auth_controller.dart';
 import 'package:e_commerce/features/auth/data/models/verify_otp_request_model.dart';
 import 'package:e_commerce/features/auth/presentation/controllers/verify_otp_controller.dart';
 import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dart';
@@ -7,6 +8,8 @@ import 'package:e_commerce/features/shared/presentation/widgets/snack_bar_messag
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../shared/presentation/screens/bottom_nav_holder_screen.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   const VerifyOtpScreen({super.key, required this.email});
@@ -90,8 +93,10 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
         email: widget.email, otp: _otpTEController.text);
     final bool isSuccess = await _verifyOtpController.verifyOtp(model);
     if (isSuccess) {
-      // Cache user data
-      // Navigate to home
+      await Get.find<AuthController>().saveUserData(
+          _verifyOtpController.userModel!, _verifyOtpController.accessToken!);
+      Navigator.pushNamedAndRemoveUntil(
+          context, BottomNavHolderScreen.name, (predicate) => false);
     } else {
       showSnackBarMessage(context, _verifyOtpController.errorMessage!);
     }

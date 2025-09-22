@@ -1,9 +1,11 @@
+import 'package:e_commerce/app/controllers/auth_controller.dart';
 import 'package:e_commerce/app/extensions/localization_extension.dart';
 import 'package:e_commerce/app/utils/app_version_service.dart';
 import 'package:e_commerce/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:e_commerce/features/auth/presentation/widgets/app_logo.dart';
 import 'package:e_commerce/features/shared/presentation/screens/bottom_nav_holder_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _moveToNextScreen() async {
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 2));
+    bool isUserLoggedIn = await Get.find<AuthController>().isUserAlreadyLoggedIn();
+    if (isUserLoggedIn) {
+      await Get.find<AuthController>().loadUserData();
+    }
     Navigator.pushReplacementNamed(context, SignUpScreen.name);
   }
 
