@@ -1,11 +1,13 @@
 import 'package:e_commerce/app/asset_paths.dart';
 import 'package:e_commerce/features/shared/presentation/controllers/main_nav_controller.dart';
+import 'package:e_commerce/features/shared/presentation/widgets/centered_circular_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../shared/presentation/widgets/product_card.dart';
 import '../../../shared/presentation/widgets/product_category_item.dart';
+import '../controllers/home_slider_controller.dart';
 import '../widgets/app_bar_icon_button.dart';
 import '../widgets/home_banner_slider.dart';
 
@@ -40,7 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 16),
               _buildSearchBar(),
               const SizedBox(height: 16),
-              HomeBannerSlider(),
+              GetBuilder<HomeSliderController>(
+                builder: (controller) {
+                  if (controller.getSlidersInProgress) {
+                    return SizedBox(
+                        height: 180,
+                        child: CenteredCircularProgress());
+                  }
+                  return HomeBannerSlider(sliders: controller.sliders);
+                }
+              ),
               const SizedBox(height: 16),
               _buildSectionHeader(
                 title: 'Categories',
