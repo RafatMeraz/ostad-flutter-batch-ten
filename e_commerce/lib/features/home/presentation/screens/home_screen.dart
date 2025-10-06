@@ -1,4 +1,5 @@
 import 'package:e_commerce/app/asset_paths.dart';
+import 'package:e_commerce/features/shared/presentation/controllers/category_controller.dart';
 import 'package:e_commerce/features/shared/presentation/controllers/main_nav_controller.dart';
 import 'package:e_commerce/features/shared/presentation/widgets/centered_circular_progress.dart';
 import 'package:flutter/material.dart';
@@ -76,17 +77,27 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategoryList() {
     return SizedBox(
       height: 100,
-      child: ListView.separated(
-        itemCount: 10,
-        primary: false,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          return ProductCategoryItem();
-        },
-        separatorBuilder: (context, index) {
-          return SizedBox(width: 10);
-        },
+      child: GetBuilder<CategoryController>(
+        builder: (controller) {
+          if (controller.isInitialLoading) {
+            return CenteredCircularProgress();
+          }
+          return ListView.separated(
+            itemCount: controller.categoryList.length > 10 ? 10 : controller
+                .categoryList.length,
+            primary: false,
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return ProductCategoryItem(
+                categoryModel: controller.categoryList[index],
+              );
+            },
+            separatorBuilder: (context, index) {
+              return SizedBox(width: 10);
+            },
+          );
+        }
       ),
     );
   }

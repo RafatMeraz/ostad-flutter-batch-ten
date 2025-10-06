@@ -3,6 +3,7 @@ import 'package:e_commerce/app/set_up_network_client.dart';
 import 'package:e_commerce/features/auth/presentation/controllers/login_controller.dart';
 import 'package:e_commerce/features/auth/presentation/controllers/sign_up_controller.dart';
 import 'package:e_commerce/features/home/presentation/controllers/home_slider_controller.dart';
+import 'package:e_commerce/features/shared/presentation/controllers/category_controller.dart';
 import 'package:e_commerce/features/shared/presentation/controllers/main_nav_controller.dart';
 import 'package:get/get.dart';
 
@@ -18,5 +19,6 @@ class ControllerBinding extends Bindings {
     Get.put(VerifyOtpController());
     Get.put(LoginController());
     Get.put(HomeSliderController());
+    Get.put(CategoryController());
   }
 }
