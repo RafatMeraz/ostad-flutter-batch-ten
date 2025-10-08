@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
+        // children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
       ),
     );
   }
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
+        // children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
       ),
     );
   }
@@ -124,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
+        // children: [1, 2, 3, 4, 56].map((e) => ProductCard()).toList(),
       ),
     );
   }
