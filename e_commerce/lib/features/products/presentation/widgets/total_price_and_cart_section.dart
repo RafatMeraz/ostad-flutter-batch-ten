@@ -1,10 +1,26 @@
+import 'package:e_commerce/app/controllers/auth_controller.dart';
+import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:e_commerce/features/products/presentation/controllers/add_to_cart_controller.dart';
+import 'package:e_commerce/features/shared/presentation/widgets/centered_circular_progress.dart';
+import 'package:e_commerce/features/shared/presentation/widgets/snack_bar_message.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../app/app_colors.dart';
 import '../../../../app/constants.dart';
 
-class TotalPriceAndCartSection extends StatelessWidget {
-  const TotalPriceAndCartSection({super.key});
+class TotalPriceAndCartSection extends StatefulWidget {
+  const TotalPriceAndCartSection({super.key, required this.productId});
+
+  final String productId;
+
+  @override
+  State<TotalPriceAndCartSection> createState() =>
+      _TotalPriceAndCartSectionState();
+}
+
+class _TotalPriceAndCartSectionState extends State<TotalPriceAndCartSection> {
+  final AddToCartController _cartController = AddToCartController();
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +55,37 @@ class TotalPriceAndCartSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: 120,
-            child: FilledButton(onPressed: () {}, child: Text('Add to Cart')),
+          GetBuilder(
+            init: _cartController,
+            builder: (controller) {
+              return SizedBox(
+                width: 120,
+                child: Visibility(
+                  visible: controller.addToCartInProgress == false,
+                  replacement: CenteredCircularProgress(),
+                  child: FilledButton(
+                    onPressed: _onTapAddToCardButton,
+                    child: Text('Add to Cart'),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _onTapAddToCardButton() async {
+    if (await Get.find<AuthController>().isUserAlreadyLoggedIn()) {
+      final bool isSuccess = await _cartController.addToCart(widget.productId);
+      if (isSuccess) {
+        showSnackBarMessage(context, 'Added to cart');
+      } else {
+        showSnackBarMessage(context, _cartController.errorMessage!);
+      }
+    } else {
+      Navigator.pushNamed(context, SignInScreen.name);
+    }
   }
 }

@@ -176,7 +176,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                 ),
               ),
-              TotalPriceAndCartSection(),
+              TotalPriceAndCartSection(productId: widget.productId),
             ],
           );
         },
