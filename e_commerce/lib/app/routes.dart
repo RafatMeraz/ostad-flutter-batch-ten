@@ -26,7 +26,8 @@ MaterialPageRoute onGenerateRoute(RouteSettings settings) {
     final CategoryModel category = settings.arguments as CategoryModel;
     screen = ProductListScreen(category: category);
   } else if (settings.name == ProductDetailsScreen.name) {
-    screen = ProductDetailsScreen();
+    final String productId = settings.arguments as String;
+    screen = ProductDetailsScreen(productId: productId);
   }
 
   return MaterialPageRoute(builder: (ctx) => screen);
