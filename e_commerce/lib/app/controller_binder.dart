@@ -8,6 +8,7 @@ import 'package:e_commerce/features/shared/presentation/controllers/main_nav_con
 import 'package:get/get.dart';
 
 import '../features/auth/presentation/controllers/verify_otp_controller.dart';
+import '../features/carts/presentation/controllers/cart_list_controller.dart';
 
 class ControllerBinding extends Bindings {
   @override
@@ -20,5 +21,6 @@ class ControllerBinding extends Bindings {
     Get.put(LoginController());
     Get.put(HomeSliderController());
     Get.put(CategoryController());
+    Get.put(CartListController());
   }
 }

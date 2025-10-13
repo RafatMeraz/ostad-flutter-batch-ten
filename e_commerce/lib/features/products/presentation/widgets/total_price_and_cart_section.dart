@@ -1,6 +1,8 @@
 import 'package:e_commerce/app/controllers/auth_controller.dart';
 import 'package:e_commerce/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:e_commerce/features/products/presentation/controllers/add_to_cart_controller.dart';
+import 'package:e_commerce/features/shared/data/models/product_details_model.dart';
+import 'package:e_commerce/features/shared/data/models/product_model.dart';
 import 'package:e_commerce/features/shared/presentation/widgets/centered_circular_progress.dart';
 import 'package:e_commerce/features/shared/presentation/widgets/snack_bar_message.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +12,9 @@ import '../../../../app/app_colors.dart';
 import '../../../../app/constants.dart';
 
 class TotalPriceAndCartSection extends StatefulWidget {
-  const TotalPriceAndCartSection({super.key, required this.productId});
+  const TotalPriceAndCartSection({super.key, required this.productModel});
 
-  final String productId;
+  final ProductDetailsModel productModel;
 
   @override
   State<TotalPriceAndCartSection> createState() =>
@@ -48,7 +50,7 @@ class _TotalPriceAndCartSectionState extends State<TotalPriceAndCartSection> {
                 ),
               ),
               Text(
-                '${takaSign}100',
+                '$takaSign${widget.productModel.currentPrice}',
                 style: textTheme.titleMedium?.copyWith(
                   color: AppColors.themeColor,
                 ),
@@ -78,7 +80,8 @@ class _TotalPriceAndCartSectionState extends State<TotalPriceAndCartSection> {
 
   Future<void> _onTapAddToCardButton() async {
     if (await Get.find<AuthController>().isUserAlreadyLoggedIn()) {
-      final bool isSuccess = await _cartController.addToCart(widget.productId);
+      final bool isSuccess = await _cartController.addToCart(
+          widget.productModel.id);
       if (isSuccess) {
         showSnackBarMessage(context, 'Added to cart');
       } else {
